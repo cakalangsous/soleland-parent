@@ -1,5 +1,5 @@
 // ** React Imports
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 
 // ** Custom Components
 import InputPasswordToggle from "@components/input-password-toggle"
@@ -15,6 +15,7 @@ import {
     Input,
     Button,
     FormFeedback,
+    Alert,
 } from "reactstrap"
 
 import Spinner from "../@core/components/spinner/Fallback-spinner"
@@ -36,6 +37,7 @@ const Register = () => {
     const navigate = useNavigate()
 
     const { accessToken } = useSelector((state) => state.auth)
+    const { state } = useLocation()
 
     useEffect(() => {
         if (accessToken) {
@@ -52,7 +54,7 @@ const Register = () => {
             .required("confirm password is required")
             .oneOf(
                 [yup.ref("password"), null],
-                "Confirm password doesn't match with Password",
+                "Confirm password doesn't match with Password"
             ),
         tnc: yup
             .bool()
@@ -72,6 +74,10 @@ const Register = () => {
 
     const onSubmitHandle = async (data) => {
         const res = await register(data)
+
+        if (state !== null && state.verifyStatus === false) {
+            state.verifyStatus = true
+        }
 
         if (res.status === false) {
             const { username, email } = res.error
@@ -93,9 +99,7 @@ const Register = () => {
                     message: res.message ? res.message : "Something went wrong",
                 })
             }
-        }
-
-        if (res.data.status === true) {
+        } else if (res.data.status === true) {
             dispatch(handleRegisterSuccess(true))
             navigate("/login")
         }
@@ -124,6 +128,15 @@ const Register = () => {
                         <CardText className="mb-2">
                             Make your app management easy and fun!
                         </CardText>
+
+                        {state?.verifyStatus === false && (
+                            <Alert color="danger" isOpen={!state?.verifyStatus}>
+                                <div className="alert-body">
+                                    {state?.verifyMessage}
+                                </div>
+                            </Alert>
+                        )}
+
                         <Form
                             className="auth-register-form mt-2"
                             onSubmit={handleSubmit(onSubmitHandle)}
@@ -238,7 +251,7 @@ const Register = () => {
                                             onBlur={onBlur}
                                             onChange={onChange}
                                             invalid={Boolean(
-                                                errors.confirmPassword,
+                                                errors.confirmPassword
                                             )}
                                         />
                                     )}

@@ -29,3 +29,13 @@ export const login = async (email, password) => {
         }
     }
 }
+
+export const confirm = async (verifyToken) => {
+    try {
+        return await axios.post(`/parent/email-confirm/${verifyToken}`)
+    } catch (err) {
+        if (err.response.data) {
+            return err.response.data
+        }
+    }
+}

@@ -1,5 +1,5 @@
 // ** React Imports
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 
 // ** Custom Components
 import InputPasswordToggle from "@components/input-password-toggle"
@@ -39,6 +39,7 @@ const LoginBasic = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { accessToken, registerSuccess } = useSelector((state) => state.auth)
+    const { state } = useLocation()
 
     useEffect(() => {
         if (accessToken) {
@@ -81,7 +82,7 @@ const LoginBasic = () => {
                 handleLogin({
                     accessToken: res.data.data.token,
                     user: decoded,
-                }),
+                })
             )
             dispatch(changeLoginState(true))
             localStorage.setItem("isLoggedIn", true)
@@ -113,22 +114,25 @@ const LoginBasic = () => {
                             Please sign-in to your account and start the
                             adventure
                         </CardText>
-                        {registerSuccess && (
-                            <Alert
-                                color="success"
-                                isOpen={visible}
-                                toggle={() => {
-                                    setVisible(false)
-                                    dispatch(handleRegisterSuccess(false))
-                                }}
-                            >
-                                <div className="alert-body">
-                                    Congratulations! You're successfully
-                                    registered. Please verify your email to
-                                    login.
-                                </div>
-                            </Alert>
-                        )}
+                        {registerSuccess ||
+                            (state?.verifyStatus === false && (
+                                <Alert
+                                    color="success"
+                                    isOpen={visible}
+                                    toggle={() => {
+                                        setVisible(false)
+                                        dispatch(handleRegisterSuccess(false))
+                                    }}
+                                >
+                                    <div className="alert-body">
+                                        {state?.verifyStatus
+                                            ? state?.verifyMessage
+                                            : `Congratulations! You're successfully
+                                    registered. Please verify your email to`}
+                                        login.
+                                    </div>
+                                </Alert>
+                            ))}
 
                         {errors.general && (
                             <Alert

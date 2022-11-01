@@ -15,6 +15,7 @@ import {
 import Breadcrumbs from "@components/breadcrumbs"
 
 import useProtectedAxios from "../../utility/hooks/useProtectedAxios"
+import AddNewModal from "./AddNewModal"
 
 const TableBasic = (props) => {
     const { kids } = props
@@ -67,6 +68,10 @@ const Kids = () => {
     const protectedAxios = useProtectedAxios()
     const [kids, setKids] = useState(null)
 
+    const [sidebarOpen, setSidebarOpen] = useState(false)
+
+    const toggleSideBar = () => setSidebarOpen(!sidebarOpen)
+
     const getKids = async () => {
         try {
             const res = await protectedAxios.get("/parent/kids")
@@ -92,7 +97,9 @@ const Kids = () => {
                         <CardHeader>
                             <CardTitle>Kids data</CardTitle>
                             {kids && kids.length <= 4 && (
-                                <Button color="primary">Add Kid</Button>
+                                <Button color="primary" onClick={toggleSideBar}>
+                                    Add Kid
+                                </Button>
                             )}
                         </CardHeader>
                         <CardBody>
@@ -101,6 +108,12 @@ const Kids = () => {
                     </Card>
                 </Col>
             </Row>
+
+            <AddNewModal
+                open={sidebarOpen}
+                toggleSideBar={toggleSideBar}
+                protectedAxios
+            />
         </Fragment>
     )
 }

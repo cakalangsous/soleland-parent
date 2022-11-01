@@ -33,7 +33,9 @@ const useProtectedAxios = () => {
             const decodedAccessToken = jwtDecode(tempAccessToken)
             const currentDate = new Date()
 
-            config.headers.authorization = `Bearer ${tempAccessToken}`
+            config.headers.Authorization = `Bearer ${tempAccessToken}`
+
+            console.log(config.headers)
 
             if (decodedAccessToken.exp * 1000 < currentDate.getTime()) {
                 try {
@@ -43,9 +45,9 @@ const useProtectedAxios = () => {
                         handleLogin({
                             accessToken: res.data.accessToken,
                             user: decoded,
-                        }),
+                        })
                     )
-                    config.headers.authorization = `Bearer ${res.data.accessToken}`
+                    config.headers.Authorization = `Bearer ${res.data.accessToken}`
                 } catch (error) {
                     console.log("error refresh token ", error)
                 }

@@ -31,6 +31,7 @@ const Login = lazy(() => import("../../views/Login"))
 const Register = lazy(() => import("../../views/Register"))
 const ForgotPassword = lazy(() => import("../../views/ForgotPassword"))
 const Error = lazy(() => import("../../views/Error"))
+const EmailConfirm = lazy(() => import("../../views/EmailConfirm"))
 
 // ** Merge Routes
 const Routes = [
@@ -71,6 +72,13 @@ const Routes = [
     {
         path: "/error",
         element: <Error />,
+        meta: {
+            layout: "blank",
+        },
+    },
+    {
+        path: "/confirm/:verifyToken",
+        element: <EmailConfirm />,
         meta: {
             layout: "blank",
         },
