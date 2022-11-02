@@ -16,9 +16,10 @@ import {
     Button,
     FormFeedback,
     Alert,
+    Spinner,
 } from "reactstrap"
 
-import Spinner from "../@core/components/spinner/Fallback-spinner"
+// import Spinner from "../@core/components/spinner/Loading-spinner"
 
 import { useForm, Controller } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -304,8 +305,16 @@ const Register = () => {
                                 color="primary"
                                 block
                             >
-                                {isSubmitting && <Spinner />}
-                                Sign up
+                                {isSubmitting ? (
+                                    <>
+                                        <Spinner color="white" size="sm" />
+                                        <span className="ms-50">
+                                            Please wait...
+                                        </span>
+                                    </>
+                                ) : (
+                                    "Sign up"
+                                )}
                             </Button>
                         </Form>
                         <p className="text-center mt-2">

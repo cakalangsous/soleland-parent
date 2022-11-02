@@ -2,7 +2,7 @@ import jwtDecode from "jwt-decode"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { handleLogin } from "../../redux/auth"
-import axios from "../../api/customAxios"
+import axios from "axios"
 import refreshToken from "../../api/refreshToken"
 import { useNavigate } from "react-router-dom"
 
@@ -33,9 +33,7 @@ const useProtectedAxios = () => {
             const decodedAccessToken = jwtDecode(tempAccessToken)
             const currentDate = new Date()
 
-            config.headers.Authorization = `Bearer ${tempAccessToken}`
-
-            console.log(config.headers)
+            config.headers.authorization = `Bearer ${tempAccessToken}`
 
             if (decodedAccessToken.exp * 1000 < currentDate.getTime()) {
                 try {
@@ -47,7 +45,7 @@ const useProtectedAxios = () => {
                             user: decoded,
                         })
                     )
-                    config.headers.Authorization = `Bearer ${res.data.accessToken}`
+                    config.headers.authorization = `Bearer ${res.data.accessToken}`
                 } catch (error) {
                     console.log("error refresh token ", error)
                 }

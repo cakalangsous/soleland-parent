@@ -16,6 +16,7 @@ import {
     Button,
     Alert,
     FormFeedback,
+    Spinner,
 } from "reactstrap"
 
 import { useState, useEffect } from "react"
@@ -40,6 +41,12 @@ const LoginBasic = () => {
     const navigate = useNavigate()
     const { accessToken, registerSuccess } = useSelector((state) => state.auth)
     const { state } = useLocation()
+    let verifyStatus, verifyMessage
+
+    if (state) {
+        verifyStatus = state.verifyStatus
+        verifyMessage = state.verifyMessage
+    }
 
     useEffect(() => {
         if (accessToken) {
@@ -114,25 +121,37 @@ const LoginBasic = () => {
                             Please sign-in to your account and start the
                             adventure
                         </CardText>
-                        {registerSuccess ||
-                            (state?.verifyStatus === false && (
-                                <Alert
-                                    color="success"
-                                    isOpen={visible}
-                                    toggle={() => {
-                                        setVisible(false)
-                                        dispatch(handleRegisterSuccess(false))
-                                    }}
-                                >
-                                    <div className="alert-body">
-                                        {state?.verifyStatus
-                                            ? state?.verifyMessage
-                                            : `Congratulations! You're successfully
-                                    registered. Please verify your email to`}
-                                        login.
-                                    </div>
-                                </Alert>
-                            ))}
+                        {registerSuccess && (
+                            <Alert
+                                color="success"
+                                isOpen={visible}
+                                toggle={() => {
+                                    setVisible(false)
+                                    dispatch(handleRegisterSuccess(false))
+                                }}
+                            >
+                                <div className="alert-body">
+                                    Congratulations! You're successfully
+                                    registered. Please verify your email to
+                                    login.
+                                </div>
+                            </Alert>
+                        )}
+
+                        {verifyStatus && (
+                            <Alert
+                                color="success"
+                                isOpen={visible}
+                                toggle={() => {
+                                    setVisible(false)
+                                    dispatch(handleRegisterSuccess(false))
+                                }}
+                            >
+                                <div className="alert-body">
+                                    {verifyMessage}
+                                </div>
+                            </Alert>
+                        )}
 
                         {errors.general && (
                             <Alert
@@ -207,11 +226,21 @@ const LoginBasic = () => {
                                 )}
                             </div>
                             <Button
+                                type="submit"
                                 disabled={isSubmitting}
                                 color="primary"
                                 block
                             >
-                                Sign in
+                                {isSubmitting ? (
+                                    <>
+                                        <Spinner color="white" size="sm" />
+                                        <span className="ms-50">
+                                            Please wait...
+                                        </span>
+                                    </>
+                                ) : (
+                                    "Sign in"
+                                )}
                             </Button>
                         </Form>
                         <p className="text-center mt-2">

@@ -20,7 +20,7 @@ import * as yup from "yup"
 // ** Styles
 import "@styles/react/libs/flatpickr/flatpickr.scss"
 
-const AddNewModal = ({ open, handleModal, protectedAxios }) => {
+const AddNewModal = ({ open, toggleSideBar, protectedAxios }) => {
     const schema = yup.object().shape({
         name: yup.string().required(),
         username: yup.string().required(),
@@ -57,10 +57,10 @@ const AddNewModal = ({ open, handleModal, protectedAxios }) => {
     return (
         <Modal
             isOpen={open}
-            toggle={handleModal}
+            toggle={toggleSideBar}
             className="modal-dialog-centered"
         >
-            <ModalHeader toggle={handleModal}>Add Kid Form</ModalHeader>
+            <ModalHeader toggle={toggleSideBar}>Add Kid Form</ModalHeader>
             <ModalBody className="mb-2">
                 <Form
                     className="auth-register-form mt-2"
@@ -220,7 +220,6 @@ const AddNewModal = ({ open, handleModal, protectedAxios }) => {
                         color="primary"
                         block
                     >
-                        {isSubmitting && <Spinner />}
                         Sign up
                     </Button>
                 </Form>

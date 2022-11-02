@@ -17,7 +17,7 @@ function EmailConfirm() {
                 navigate("/login", {
                     state: {
                         verifyStatus: true,
-                        verifyMessage: "Email verified",
+                        verifyMessage: "Email verified. You can login now.",
                     },
                 })
             } else {
@@ -38,11 +38,7 @@ function EmailConfirm() {
         confirmCall()
     }, [])
 
-    return (
-        <>
-            <h3>Email confirmation</h3>
-        </>
-    )
+    return <></>
 }
 
 export default EmailConfirm

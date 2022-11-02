@@ -25,7 +25,7 @@ const TemplateTitle = "%s - Vuexy React Admin Template"
 // ** Default Route
 const DefaultRoute = "/login"
 
-const Home = lazy(() => import("../../views/Home"))
+const Dashboard = lazy(() => import("../../views/Dashboard"))
 const Kids = lazy(() => import("../../views/kids/Kids"))
 const Login = lazy(() => import("../../views/Login"))
 const Register = lazy(() => import("../../views/Register"))
@@ -42,7 +42,7 @@ const Routes = [
     },
     {
         path: "/dashboard",
-        element: <Home />,
+        element: <Dashboard />,
     },
     {
         path: "/kids",
