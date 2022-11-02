@@ -1,4 +1,3 @@
-// ** Reactstrap Imports
 import {
     Modal,
     Input,
@@ -8,9 +7,10 @@ import {
     ModalBody,
     Form,
     FormFeedback,
+    Spinner,
 } from "reactstrap"
 
-import Spinner from "../../@core/components/spinner/Fallback-spinner"
+import Flatpickr from "react-flatpickr"
 import InputPasswordToggle from "@components/input-password-toggle"
 
 import { useForm, Controller } from "react-hook-form"
@@ -19,8 +19,18 @@ import * as yup from "yup"
 
 // ** Styles
 import "@styles/react/libs/flatpickr/flatpickr.scss"
+import useProtectedAxios from "../../utility/hooks/useProtectedAxios"
 
-const AddNewModal = ({ open, toggleSideBar, protectedAxios }) => {
+const AddNewModal = ({
+    open,
+    toggleSideBar,
+    setKids,
+    kids,
+    setSidebarOpen,
+    setSuccess,
+}) => {
+    const protectedAxios = useProtectedAxios()
+
     const schema = yup.object().shape({
         name: yup.string().required(),
         username: yup.string().required(),
@@ -33,12 +43,13 @@ const AddNewModal = ({ open, toggleSideBar, protectedAxios }) => {
                 "Confirm password doesn't match with Password"
             ),
         gender: yup.string().required(),
+        dob: yup.date().required("Date of birth is required"),
     })
 
     const {
         control,
         handleSubmit,
-        // setError,
+        setError,
         formState: { errors, isSubmitting },
     } = useForm({
         mode: "onBlur",
@@ -46,11 +57,48 @@ const AddNewModal = ({ open, toggleSideBar, protectedAxios }) => {
     })
 
     const onSubmitHandle = async (data) => {
+        const { name, username, gender, password, confirmPassword, dob } = data
         try {
-            const res = await protectedAxios.get("/parent/kids")
-            console.log(res, data)
+            const res = await protectedAxios.post("/parent/kids", {
+                name,
+                username,
+                password,
+                password_confirmation: confirmPassword,
+                gender,
+                dob,
+            })
+
+            if (res.data.status === true) {
+                setKids([...kids, res.data.data])
+                setSidebarOpen(false)
+                setSuccess(true)
+            }
         } catch (err) {
-            console.log(err)
+            if (err.response.data.status === false) {
+                const { username, name, gender, dob } = err.response.data.error
+                let fieldError = false
+
+                if (username !== undefined) fieldError = username
+                if (name !== undefined) fieldError = name
+                if (gender !== undefined) fieldError = gender
+                if (dob !== undefined) fieldError = gender
+
+                if (fieldError) {
+                    setError(fieldError.param, {
+                        type: "manual",
+                        message: fieldError.msg
+                            ? fieldError.msg
+                            : "Something went wrong",
+                    })
+                } else {
+                    setError("general", {
+                        type: "manual",
+                        message: res.message
+                            ? res.message
+                            : "Something went wrong",
+                    })
+                }
+            }
         }
     }
 
@@ -214,13 +262,55 @@ const AddNewModal = ({ open, toggleSideBar, protectedAxios }) => {
                             <FormFeedback>{errors.gender.message}</FormFeedback>
                         )}
                     </div>
+                    <div className="mb-1">
+                        <Label className="form-label" for="register-dob">
+                            Date of birth
+                        </Label>
+                        <Controller
+                            name="dob"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({
+                                field: { value, onChange, onBlur },
+                            }) => (
+                                <Flatpickr
+                                    name="dob"
+                                    value={value}
+                                    id="hf-picker"
+                                    className={
+                                        Boolean(errors.dob)
+                                            ? "form-control flatpickr-input is-invalid"
+                                            : "form-control"
+                                    }
+                                    placeholder="Date of birth"
+                                    onChange={onChange}
+                                    options={{
+                                        altInput: true,
+                                        altFormat: "F j, Y",
+                                        dateFormat: "Y-m-d",
+                                    }}
+                                    onBlur={onBlur}
+                                />
+                            )}
+                        />
+                        {errors.dob && (
+                            <FormFeedback>{errors.dob.message}</FormFeedback>
+                        )}
+                    </div>
                     <Button
                         type="submit"
                         disabled={isSubmitting}
                         color="primary"
                         block
                     >
-                        Sign up
+                        {isSubmitting ? (
+                            <>
+                                <Spinner color="white" size="sm" />
+                                <span className="ms-50">Please wait...</span>
+                            </>
+                        ) : (
+                            "Submit"
+                        )}
                     </Button>
                 </Form>
             </ModalBody>

@@ -10,6 +10,8 @@ import {
     CardBody,
     CardTitle,
     Button,
+    Spinner,
+    Alert,
 } from "reactstrap"
 
 import Breadcrumbs from "@components/breadcrumbs"
@@ -19,6 +21,7 @@ import AddNewModal from "./AddNewModal"
 
 const TableBasic = (props) => {
     const { kids } = props
+
     return (
         <Table responsive>
             <thead>
@@ -27,11 +30,24 @@ const TableBasic = (props) => {
                     <th>Name</th>
                     <th>Username</th>
                     <th>Gender</th>
+                    <th>Date of Birth</th>
                     <th>Level</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
+                {kids === false && (
+                    <tr>
+                        <td colSpan={7} align="center">
+                            <div className="d-flex align-items-center justify-content-center w-100 mt-2">
+                                <Spinner color="primary" size="lg" />
+                                <span className="ms-50">
+                                    Loading Kids data...
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                )}
                 {kids &&
                     kids.map((value, index) => {
                         return (
@@ -40,6 +56,7 @@ const TableBasic = (props) => {
                                 <td>{value.name}</td>
                                 <td>{value.username}</td>
                                 <td>{value.gender}</td>
+                                <td>{value.dob}</td>
                                 <td>{value.level}</td>
                                 <td>
                                     <Button
@@ -66,27 +83,28 @@ const TableBasic = (props) => {
 
 const Kids = () => {
     const protectedAxios = useProtectedAxios()
-    const [kids, setKids] = useState(null)
+    const [kids, setKids] = useState(false)
 
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const [success, setSuccess] = useState(false)
 
     const toggleSideBar = () => setSidebarOpen(!sidebarOpen)
 
-    const getKids = async () => {
-        try {
-            const res = await protectedAxios.get("/parent/kids")
-
-            if (res.data.status === true) {
-                setKids(res.data.kids)
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
     useEffect(() => {
-        getKids()
-    }, [])
+        if (kids) return
+        const getKids = async () => {
+            try {
+                const res = await protectedAxios.get("/parent/kids")
 
+                if (res.data.status === true) {
+                    setKids(res.data.kids)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getKids()
+    }, [kids])
     return (
         <Fragment>
             <Breadcrumbs title="Kids" data={[{ title: "Kids" }]} />
@@ -96,12 +114,32 @@ const Kids = () => {
                     <Card>
                         <CardHeader>
                             <CardTitle>Kids data</CardTitle>
-                            {kids && kids.length <= 4 && (
-                                <Button color="primary" onClick={toggleSideBar}>
+                            {kids && kids.length < 4 && (
+                                <Button
+                                    color="primary"
+                                    onClick={() => {
+                                        toggleSideBar()
+                                        setSuccess(false)
+                                    }}
+                                >
                                     Add Kid
                                 </Button>
                             )}
                         </CardHeader>
+                        {success && (
+                            <div className="px-2 mt-2">
+                                <Alert
+                                    color="success"
+                                    isOpen={success}
+                                    toggle={() => setSuccess(false)}
+                                >
+                                    <div className="alert-body">
+                                        Success! New kid data are stored
+                                        successfully
+                                    </div>
+                                </Alert>
+                            </div>
+                        )}
                         <CardBody>
                             <TableBasic kids={kids} responsive />
                         </CardBody>
@@ -112,7 +150,10 @@ const Kids = () => {
             <AddNewModal
                 open={sidebarOpen}
                 toggleSideBar={toggleSideBar}
-                protectedAxios
+                setKids={setKids}
+                kids={kids}
+                setSidebarOpen={setSidebarOpen}
+                setSuccess={setSuccess}
             />
         </Fragment>
     )
