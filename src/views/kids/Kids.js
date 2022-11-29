@@ -159,7 +159,7 @@ const Kids = () => {
                                             className="kid-avatar"
                                         />
 
-                                        <h3>Benkin</h3>
+                                        <h3>{kid.name}</h3>
                                     </div>
 
                                     <div className="row kid-btn-wrapper container">
