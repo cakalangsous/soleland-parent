@@ -161,12 +161,16 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 		align-items: center;
 		position: relative;
 		top: -2rem;
+		height: calc(100% + 2rem);
 		z-index: 3;
 		background-color: #fff;
+		border-bottom-left-radius: 30px;
+		border-bottom-right-radius: 30px;
+		padding-bottom: 1rem;
 
 		.kid-avatar {
 			position: relative;
-			top: -2.2rem;
+			top: -3.1rem;
 		}
 
 		.kid-btn-wrapper {
