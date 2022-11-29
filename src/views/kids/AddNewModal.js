@@ -34,7 +34,7 @@ const AddNewModal = ({
     const schema = yup.object().shape({
         name: yup.string().required(),
         username: yup.string().required(),
-        password: yup.string().required(),
+        password: yup.string().required().min(3).max(15),
         confirmPassword: yup
             .string()
             .required("confirm password is required")

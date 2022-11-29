@@ -9,3 +9,299 @@ NOTE:
 ------
 PLACE HERE YOUR OWN SCSS CODES AND IF NEEDED, OVERRIDE THE STYLES FROM THE OTHER STYLESHEETS.
 WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BETTER LIKE THIS.  */
+
+
+
+.dashboard-card {
+	background-color: transparent;
+	box-shadow: none;
+}
+
+.dashboard-card-bg {
+	top: 0;
+	z-index: -1;
+	width: 93%;
+	object-fit: fill;
+	height: 100%;
+}
+
+.dashboard-card .info-wrapper {
+	display: flex;
+	align-items: flex-start;
+
+	.info-wrapper-details * {
+		color: #fff;
+	}
+
+	.info-wrapper-details-info {
+		display: flex;
+		flex-direction: column;
+		margin-bottom: 2.5rem;
+	}
+
+	.info-wrapper-details h4 {
+		font-size: 1rem;
+	}
+
+	.info-wrapper-details small {
+		font-size: .7rem;
+	}
+}
+
+.card-details-link {
+	color: #fff;
+	padding: .3rem 1rem;
+	border-radius: 17px;
+	font-size: .8rem;
+}
+
+.card-details-link.link-female {
+	background-color: #D49833;
+	border: 1px solid #D49833;
+}
+
+.card-details-link.link-male {
+	background-color: #4F8C2A;
+	border: 1px solid #4F8C2A;
+}
+
+.dashboard-card .image-wrapper {
+	margin-right: 1rem;
+}
+
+.desktop-pie-chart {
+	height: 100%;
+	z-index: -1;
+	position: absolute;
+	right: 0;
+}
+
+.screen-time-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+}
+
+.screen-time-wrapper * {
+	color: #fff;
+}
+
+.screen-time-wrapper h5 {
+	font-size: 1rem;
+	margin-bottom: .3rem;
+}
+
+.screen-time-wrapper small {
+	font-size: .7rem;
+}
+
+.sole-mobile-menu-trigger {
+	background-color: #CB4E18;
+	border: 1px solid #CB4E18;
+	border-radius: 9px;
+	padding: .3rem !important;
+
+	svg {
+		color: #fff !important;
+	}
+}
+
+.logout {
+	color: #CB4E18;
+	width: 100% !important;
+}
+
+.kids-list-mobile {
+
+	.kid-list-item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.info-wrapper {
+		display: flex;
+		align-items: center;
+	}
+}
+
+.kid-list-card {
+	position: relative;
+	border-radius: 30px;
+	display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+	margin-bottom: 2rem;
+
+	background-color: transparent;
+    background-clip: border-box;
+
+	transition: all 0.3s ease-in-out, background 0s, color 0s, border-color 0s;
+	
+	.image-bg {
+		z-index: 0;
+		.card-bg {
+			width: 100%;
+			position: relative;
+			top: 0;
+			left: 0;
+			object-fit: cover;
+			z-index: 0;
+		}
+	}
+
+	.kid-info-wrapper {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+		top: -2rem;
+		z-index: 3;
+		background-color: #fff;
+
+		.kid-avatar {
+			position: relative;
+			top: -2.2rem;
+		}
+
+		.kid-btn-wrapper {
+			width: 100%;
+			margin-top: 3rem;
+			gap: 2rem;
+			justify-content: center;
+
+			.kid-card-btn {
+				outline: none;
+				color: #fff;
+				padding: .5rem .7rem ;
+				border-radius: 20px;
+			}
+
+			.btn-female {
+				background-color: #D49833;
+				border: 1px solid #D49833;
+			}
+
+			.btn-male {
+				background-color: #4F8C2A;
+				border: 1px solid #4F8C2A;
+			}
+
+		}
+	}
+}
+
+@media screen and (min-width: 540px) {
+	.dashboard-card .info-wrapper {
+		.info-wrapper-details-info {
+			margin-bottom: 5rem;
+		}
+
+		.info-wrapper-details h4 {
+			font-size: 1.2rem;
+		}
+	
+		.info-wrapper-details small {
+			font-size: .9rem;
+		}
+	}
+	
+	.desktop-pie-chart {
+		right: 8%;
+	}
+
+	.screen-time-wrapper h5 {
+		font-size: 1.2rem;
+	}
+	
+	.screen-time-wrapper small {
+		font-size: .9rem;
+	}
+
+	.card-details-link {
+		padding: .5rem 1rem;
+	}
+}
+
+@media screen and (min-width: 768px) {
+	.dashboard-card .info-wrapper {
+		flex-direction: column;
+	}
+
+	.desktop-pie-chart {
+		width: 100%;
+		z-index: -1;
+	}
+
+	.dashboard-card .info-wrapper {
+
+		.info-wrapper-details * {
+			margin-top: 1rem;
+		}
+
+		.info-wrapper-details-info {
+			display: flex;
+			flex-direction: column;
+			margin-bottom: 3rem;
+		}
+
+		.info-wrapper-details small {
+			line-height: .5rem;
+		}
+	}
+
+	.desktop-pie-chart {
+		width: 100%;
+		height: auto;
+	}
+
+	.desktop-pie-chart {
+		right: 0;
+	}
+
+	.screen-time-wrapper {
+		height: 52%;
+	}
+}
+
+@media screen and (min-width: 992px) {
+	.screen-time-wrapper {
+		height: 53%;
+	}
+}
+
+@media screen and (min-width: 1200px) {
+	.screen-time-wrapper {
+		height: 65%;
+	}
+	
+	.card-details-link {
+		padding: .7rem 1.2rem;
+	}
+}
+
+@media screen and (min-width: 1400px) {
+	.desktop-pie-chart {
+		width: 85%;
+	}
+
+	.screen-time-wrapper {
+		width: 85%;
+	}
+
+	.pie-chart-wrapper {
+		display: flex;
+		justify-content: flex-end;
+	}
+}
+
+@media screen and (min-width: 1500px) {
+	.screen-time-wrapper {
+		margin-top: 1rem;
+	}
+}

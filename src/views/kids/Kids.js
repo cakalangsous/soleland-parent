@@ -1,85 +1,20 @@
 import AvatarGroup from "@components/avatar-group"
 import { Fragment, useEffect, useState } from "react"
-import { Edit, Trash } from "react-feather"
 import {
-    Table,
-    Row,
-    Col,
-    Card,
-    CardHeader,
-    CardBody,
-    CardTitle,
     Button,
-    Spinner,
     Alert,
+    UncontrolledButtonDropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem,
 } from "reactstrap"
 
-import Breadcrumbs from "@components/breadcrumbs"
+import { FaPlus, FaPen, FaTrashAlt } from "react-icons/fa"
+import { SlOptionsVertical } from "react-icons/sl"
 
 import useProtectedAxios from "../../utility/hooks/useProtectedAxios"
 import AddNewModal from "./AddNewModal"
-
-const TableBasic = (props) => {
-    const { kids } = props
-
-    return (
-        <Table responsive>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Gender</th>
-                    <th>Date of Birth</th>
-                    <th>Level</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {kids === false && (
-                    <tr>
-                        <td colSpan={7} align="center">
-                            <div className="d-flex align-items-center justify-content-center w-100 mt-2">
-                                <Spinner color="primary" size="lg" />
-                                <span className="ms-50">
-                                    Loading Kids data...
-                                </span>
-                            </div>
-                        </td>
-                    </tr>
-                )}
-                {kids &&
-                    kids.map((value, index) => {
-                        return (
-                            <tr key={index + 1}>
-                                <td>{index + 1}</td>
-                                <td>{value.name}</td>
-                                <td>{value.username}</td>
-                                <td>{value.gender}</td>
-                                <td>{value.dob}</td>
-                                <td>{value.level}</td>
-                                <td>
-                                    <Button
-                                        className="btn-icon me-1"
-                                        color="flat-warning"
-                                    >
-                                        <Edit size={14} />
-                                    </Button>
-
-                                    <Button
-                                        className="btn-icon"
-                                        color="flat-danger"
-                                    >
-                                        <Trash size={14} />
-                                    </Button>
-                                </td>
-                            </tr>
-                        )
-                    })}
-            </tbody>
-        </Table>
-    )
-}
+import { Link } from "react-router-dom"
 
 const Kids = () => {
     const protectedAxios = useProtectedAxios()
@@ -107,45 +42,143 @@ const Kids = () => {
     }, [kids])
     return (
         <Fragment>
-            <Breadcrumbs title="Kids" data={[{ title: "Kids" }]} />
+            <div className="row pt-3">
+                <div className="col-12 w-full d-flex justify-content-end">
+                    {success && (
+                        <div className="mt-2">
+                            <Alert
+                                color="success"
+                                isOpen={success}
+                                toggle={() => setSuccess(false)}
+                            >
+                                <div className="alert-body">
+                                    Success! New kid data are stored
+                                    successfully
+                                </div>
+                            </Alert>
+                        </div>
+                    )}
+                    <Button
+                        color="primary"
+                        onClick={() => {
+                            toggleSideBar()
+                            setSuccess(false)
+                        }}
+                        className="d-flex items-center"
+                    >
+                        <FaPlus className="me-1" /> Add Kid
+                    </Button>
+                </div>
+            </div>
 
-            <Row>
-                <Col sm="12">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Kids data</CardTitle>
-                            {kids && kids.length < 4 && (
-                                <Button
-                                    color="primary"
-                                    onClick={() => {
-                                        toggleSideBar()
-                                        setSuccess(false)
-                                    }}
-                                >
-                                    Add Kid
-                                </Button>
-                            )}
-                        </CardHeader>
-                        {success && (
-                            <div className="px-2 mt-2">
-                                <Alert
-                                    color="success"
-                                    isOpen={success}
-                                    toggle={() => setSuccess(false)}
-                                >
-                                    <div className="alert-body">
-                                        Success! New kid data are stored
-                                        successfully
+            <div className="row my-3">
+                <div className="col-12 text-center">
+                    <h3>Manage Kids</h3>
+                    <p className="mt-1">Manage your Kid's accounts.</p>
+                </div>
+            </div>
+
+            <div className="row d-lg-none kids-list-mobile">
+                {kids &&
+                    kids.map((kid) => (
+                        <Fragment key={kid.id}>
+                            <div className="col-12 kid-list-item">
+                                <div className="info-wrapper">
+                                    <img
+                                        src={`./assets/images/avatar/${kid.gender}.png`}
+                                        alt=""
+                                    />
+                                    <h4 className="ms-2">{kid.name}</h4>
+                                </div>
+                                <div className="kid-menu">
+                                    <div className="breadcrumb-right dropdown">
+                                        <UncontrolledButtonDropdown>
+                                            <DropdownToggle
+                                                color="transparent"
+                                                className="btn-icon btn-round dropdown-toggle"
+                                            >
+                                                <SlOptionsVertical size={14} />
+                                            </DropdownToggle>
+                                            <DropdownMenu tag="ul" end>
+                                                <DropdownItem
+                                                    tag={Link}
+                                                    to="/apps/todo"
+                                                >
+                                                    <FaPen
+                                                        className="me-1"
+                                                        size={14}
+                                                    />
+                                                    <span className="align-middle">
+                                                        Edit
+                                                    </span>
+                                                </DropdownItem>
+                                                <hr className="my-0" />
+                                                <DropdownItem
+                                                    tag={Link}
+                                                    to="/apps/todo"
+                                                >
+                                                    <FaTrashAlt
+                                                        className="me-1"
+                                                        size={14}
+                                                    />
+                                                    <span className="align-middle">
+                                                        Delete
+                                                    </span>
+                                                </DropdownItem>
+                                            </DropdownMenu>
+                                        </UncontrolledButtonDropdown>
                                     </div>
-                                </Alert>
+                                </div>
                             </div>
-                        )}
-                        <CardBody>
-                            <TableBasic kids={kids} responsive />
-                        </CardBody>
-                    </Card>
-                </Col>
-            </Row>
+                            <hr className="my-1" />
+                        </Fragment>
+                    ))}
+            </div>
+
+            <div className="row d-none d-lg-flex">
+                {kids &&
+                    kids.map((kid) => (
+                        <div
+                            className="col-lg-4 p-0 kid-list-card"
+                            key={kid.id}
+                        >
+                            <div className="image-bg px-1">
+                                <img
+                                    src={`./assets/images/card/mobile-card-${kid.gender}.png`}
+                                    alt=""
+                                    className="card-bg"
+                                />
+                            </div>
+                            <div className="px-1">
+                                <div className="kid-info-wrapper">
+                                    <div className="kid-info">
+                                        <img
+                                            src={`./assets/images/avatar/kid-card-${kid.gender}.png`}
+                                            alt=""
+                                            width={60}
+                                            className="kid-avatar"
+                                        />
+
+                                        <h3>Benkin</h3>
+                                    </div>
+
+                                    <div className="row kid-btn-wrapper container">
+                                        <button
+                                            className={`col-5 kid-card-btn btn-${kid.gender}`}
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            className={`col-5 kid-card-btn btn-${kid.gender}`}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+            </div>
 
             <AddNewModal
                 open={sidebarOpen}

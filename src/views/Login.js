@@ -74,26 +74,35 @@ const LoginBasic = () => {
     const onSubmit = async (data) => {
         const { email, password } = data
 
-        const res = await login(email, password)
+        try {
+            const res = await login(email, password)
 
-        if (res.status === false) {
+            if (res.status === false) {
+                setVisible(true)
+                setError("general", {
+                    type: "manual",
+                    message: res.message,
+                })
+            } else {
+                const decoded = jwtDecode(res.data.data.token)
+
+                dispatch(
+                    handleLogin({
+                        accessToken: res.data.data.token,
+                        user: decoded,
+                    })
+                )
+                dispatch(changeLoginState(true))
+                localStorage.setItem("isLoggedIn", true)
+                navigate("/dashboard")
+            }
+        } catch (err) {
+            console.log(err)
             setVisible(true)
             setError("general", {
                 type: "manual",
-                message: res.message,
+                message: err,
             })
-        } else {
-            const decoded = jwtDecode(res.data.data.token)
-
-            dispatch(
-                handleLogin({
-                    accessToken: res.data.data.token,
-                    user: decoded,
-                })
-            )
-            dispatch(changeLoginState(true))
-            localStorage.setItem("isLoggedIn", true)
-            navigate("/dashboard")
         }
     }
 

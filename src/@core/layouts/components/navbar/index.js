@@ -5,10 +5,11 @@ import { Fragment } from "react"
 import NavbarUser from "./NavbarUser"
 
 // ** Third Party Components
-import { Menu } from "react-feather"
+// import { Menu } from "react-feather"
 
 // ** Reactstrap Imports
 import { NavItem, NavLink } from "reactstrap"
+import { Link } from "react-router-dom"
 
 const ThemeNavbar = (props) => {
     // ** Props
@@ -26,23 +27,39 @@ const ThemeNavbar = (props) => {
     return (
         <Fragment>
             <div className="bookmark-wrapper d-flex align-items-center">
-                <ul className="navbar-nav d-xl-none">
-                    <NavItem className="mobile-menu me-auto">
+                <ul className="navbar-nav d-flex align-items-center">
+                    {/* <NavItem className="mobile-menu me-auto">
                         <NavLink
                             className="nav-menu-main menu-toggle hidden-xs is-active"
                             onClick={() => setMenuVisibility(true)}
                         >
                             <Menu className="ficon" />
                         </NavLink>
+                    </NavItem> */}
+
+                    <NavItem className="">
+                        <NavLink
+                            className="nav-menu hidden-xs"
+                            tag={Link}
+                            to="/dashboard"
+                        >
+                            <img
+                                src={
+                                    require("@src/assets/images/logo/logo-landscape.png")
+                                        .default
+                                }
+                                alt="logo"
+                                width={"55%"}
+                            />
+                        </NavLink>
                     </NavItem>
                 </ul>
-                {/* <NavItem className="d-none d-lg-block">
-          <NavLink className="nav-link-style">
-            <ThemeToggler />
-          </NavLink>
-        </NavItem> */}
             </div>
-            <NavbarUser skin={skin} setSkin={setSkin} />
+            <NavbarUser
+                skin={skin}
+                setSkin={setSkin}
+                setMenuVisibility={setMenuVisibility}
+            />
         </Fragment>
     )
 }

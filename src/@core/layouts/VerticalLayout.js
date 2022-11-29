@@ -147,7 +147,7 @@ const VerticalLayout = (props) => {
                     "vertical-overlay-menu": windowWidth < 1200,
                     "menu-hide": !menuVisibility && windowWidth < 1200,
                     "menu-open": menuVisibility && windowWidth < 1200,
-                },
+                }
             )}
             {...(isHidden ? { "data-col": "1-column" } : {})}
         >
@@ -172,7 +172,7 @@ const VerticalLayout = (props) => {
                 className={classnames(
                     `header-navbar navbar align-items-center ${
                         navbarClasses[navbarType] || "floating-nav"
-                    } navbar-shadow`,
+                    } navbar-shadow`
                 )}
             >
                 <div className="navbar-container d-flex content">
@@ -229,7 +229,7 @@ const VerticalLayout = (props) => {
                     }`,
                     {
                         "d-none": footerType === "hidden",
-                    },
+                    }
                 )}
             >
                 {footer ? (
